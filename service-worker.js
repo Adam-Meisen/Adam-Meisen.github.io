@@ -29,7 +29,7 @@ importScripts("scripts/sw/sw-toolbox.js","scripts/sw/runtime-caching.js");
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["dist/images/hamburger.svg","d2cb0dda3e8313b990e8dcf5e25d2d0f"],["dist/images/touch/apple-touch-icon.png","7326f54bfe6776293f08b34c3a5fde7b"],["dist/images/touch/chrome-touch-icon-192x192.png","571f134f59f14a6d298ddd66c015b293"],["dist/images/touch/icon-128x128.png","7c46d686765c49b813ac5eb34fabf712"],["dist/images/touch/ms-touch-icon-144x144-precomposed.png","452d90b250d6f41a0c8f9db729113ffd"],["dist/index.html","816ec4c91a4a0a68c242c0a258d27f78"],["dist/manifest.json","8b2ac793072d0634ecc6d246ed617181"],["dist/scripts/sw/runtime-caching.js","e3e34dcb62b5d62453b9215961585488"],["dist/scripts/sw/sw-toolbox.js","d5138138ca7071b7e0fc36e90095718e"]];
+var PrecacheConfig = [["dist/images/hamburger.svg","d2cb0dda3e8313b990e8dcf5e25d2d0f"],["dist/images/touch/apple-touch-icon.png","7326f54bfe6776293f08b34c3a5fde7b"],["dist/images/touch/chrome-touch-icon-192x192.png","571f134f59f14a6d298ddd66c015b293"],["dist/images/touch/icon-128x128.png","7c46d686765c49b813ac5eb34fabf712"],["dist/images/touch/ms-touch-icon-144x144-precomposed.png","452d90b250d6f41a0c8f9db729113ffd"],["dist/index.html","fa86cc994122e49cdb40232f3e0cc650"],["dist/manifest.json","8b2ac793072d0634ecc6d246ed617181"],["dist/scripts/sw/runtime-caching.js","e3e34dcb62b5d62453b9215961585488"],["dist/scripts/sw/sw-toolbox.js","d5138138ca7071b7e0fc36e90095718e"],["dist/styles/index.css","b015d5afaccdc9955ba5450130ab7d49"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1-web-starter-kit-' + (self.registration ? self.registration.scope : '') + '-';
 
