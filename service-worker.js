@@ -29,7 +29,7 @@ importScripts("scripts/sw/sw-toolbox.js","scripts/sw/runtime-caching.js");
 
 
 /* eslint-disable quotes, comma-spacing */
-var PrecacheConfig = [["dist/images/hamburger.svg","d2cb0dda3e8313b990e8dcf5e25d2d0f"],["dist/images/touch/apple-touch-icon.png","7326f54bfe6776293f08b34c3a5fde7b"],["dist/images/touch/chrome-touch-icon-192x192.png","571f134f59f14a6d298ddd66c015b293"],["dist/images/touch/icon-128x128.png","7c46d686765c49b813ac5eb34fabf712"],["dist/images/touch/ms-touch-icon-144x144-precomposed.png","452d90b250d6f41a0c8f9db729113ffd"],["dist/index.html","0b8ae342433ed08c638667d53c6ee4b0"],["dist/manifest.json","8b2ac793072d0634ecc6d246ed617181"],["dist/scripts/sw/runtime-caching.js","e3e34dcb62b5d62453b9215961585488"],["dist/scripts/sw/sw-toolbox.js","d5138138ca7071b7e0fc36e90095718e"],["dist/styles/index.css","c411445dee676e107bef19c79573d5ab"],["dist/svgtest.html","06d26ccd343b0b51edc048bba76782db"]];
+var PrecacheConfig = [["dist/images/hamburger.svg","d2cb0dda3e8313b990e8dcf5e25d2d0f"],["dist/images/touch/apple-touch-icon.png","7326f54bfe6776293f08b34c3a5fde7b"],["dist/images/touch/chrome-touch-icon-192x192.png","571f134f59f14a6d298ddd66c015b293"],["dist/images/touch/icon-128x128.png","7c46d686765c49b813ac5eb34fabf712"],["dist/images/touch/ms-touch-icon-144x144-precomposed.png","452d90b250d6f41a0c8f9db729113ffd"],["dist/index.html","97ec6066649fe3f32854b9f4e15b9bb8"],["dist/manifest.json","8b2ac793072d0634ecc6d246ed617181"],["dist/scripts/sw/runtime-caching.js","e3e34dcb62b5d62453b9215961585488"],["dist/scripts/sw/sw-toolbox.js","d5138138ca7071b7e0fc36e90095718e"],["dist/styles/index.css","dc9319bb893b0c37cf142865f8a385f1"],["dist/svgtest.html","5d160905e7b7c93b256959e95355f566"],["dist/sw-demo.html","9206c6af4dedf8b1dbb6cbb6ec252b98"]];
 /* eslint-enable quotes, comma-spacing */
 var CacheNamePrefix = 'sw-precache-v1-web-starter-kit-' + (self.registration ? self.registration.scope : '') + '-';
 
@@ -46,7 +46,17 @@ var addDirectoryIndex = function (originalUrl, index) {
     return url.toString();
   };
 
-var populateCurrentCacheNames = function (precacheConfig, cacheNamePrefix, baseUrl) {
+var getCacheBustedUrl = function (url, now) {
+    now = now || Date.now();
+
+    var urlWithCacheBusting = new URL(url);
+    urlWithCacheBusting.search += (urlWithCacheBusting.search ? '&' : '') + 'sw-precache=' + now;
+
+    return urlWithCacheBusting.toString();
+  };
+
+var populateCurrentCacheNames = function (precacheConfig,
+    cacheNamePrefix, baseUrl) {
     var absoluteUrlToCacheName = {};
     var currentCacheNamesToAbsoluteUrl = {};
 
@@ -63,7 +73,8 @@ var populateCurrentCacheNames = function (precacheConfig, cacheNamePrefix, baseU
     };
   };
 
-var stripIgnoredUrlParameters = function (originalUrl, ignoreUrlParametersMatching) {
+var stripIgnoredUrlParameters = function (originalUrl,
+    ignoreUrlParametersMatching) {
     var url = new URL(originalUrl);
 
     url.search = url.search.slice(1) // Exclude initial '?'
@@ -108,20 +119,14 @@ self.addEventListener('install', function(event) {
         Object.keys(CurrentCacheNamesToAbsoluteUrl).filter(function(cacheName) {
           return allCacheNames.indexOf(cacheName) === -1;
         }).map(function(cacheName) {
-          var url = new URL(CurrentCacheNamesToAbsoluteUrl[cacheName]);
-          // Put in a cache-busting parameter to ensure we're caching a fresh response.
-          if (url.search) {
-            url.search += '&';
-          }
-          url.search += 'sw-precache=' + now;
-          var urlWithCacheBusting = url.toString();
+          var urlWithCacheBusting = getCacheBustedUrl(CurrentCacheNamesToAbsoluteUrl[cacheName],
+            now);
 
-          console.log('Adding URL "%s" to cache named "%s"', urlWithCacheBusting, cacheName);
           return caches.open(cacheName).then(function(cache) {
             var request = new Request(urlWithCacheBusting, {credentials: 'same-origin'});
-            return fetch(request.clone()).then(function(response) {
+            return fetch(request).then(function(response) {
               if (response.ok) {
-                return cache.put(request, response);
+                return cache.put(CurrentCacheNamesToAbsoluteUrl[cacheName], response);
               }
 
               console.error('Request for %s returned a response with status %d, so not attempting to cache it.',
@@ -137,7 +142,6 @@ self.addEventListener('install', function(event) {
             return cacheName.indexOf(CacheNamePrefix) === 0 &&
                    !(cacheName in CurrentCacheNamesToAbsoluteUrl);
           }).map(function(cacheName) {
-            console.log('Deleting out-of-date cache "%s"', cacheName);
             return caches.delete(cacheName);
           })
         );
@@ -200,19 +204,20 @@ self.addEventListener('fetch', function(event) {
 
     if (cacheName) {
       event.respondWith(
-        // We can't call cache.match(event.request) since the entry in the cache will contain the
-        // cache-busting parameter. Instead, rely on the fact that each cache should only have one
-        // entry, and return that.
+        // Rely on the fact that each cache we manage should only have one entry, and return that.
         caches.open(cacheName).then(function(cache) {
           return cache.keys().then(function(keys) {
             return cache.match(keys[0]).then(function(response) {
-              return response || fetch(event.request).catch(function(e) {
-                console.error('Fetch for "%s" failed: %O', urlWithoutIgnoredParameters, e);
-              });
+              if (response) {
+                return response;
+              }
+              // If for some reason the response was deleted from the cache,
+              // raise and exception and fall back to the fetch() triggered in the catch().
+              throw Error('The cache ' + cacheName + ' is empty.');
             });
           });
         }).catch(function(e) {
-          console.error('Couldn\'t serve response for "%s" from cache: %O', urlWithoutIgnoredParameters, e);
+          console.warn('Couldn\'t serve response for "%s" from cache: %O', event.request.url, e);
           return fetch(event.request);
         })
       );
