@@ -1,0 +1,68 @@
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%; }
+
+html body {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background-color: #292c33;
+  color: white; }
+
+html #main-logo {
+  height: 30%;
+  width: 100%;
+  /**flexbox**/
+  flex: none; }
+  html #main-logo svg {
+    height: 100%;
+    width: 100%; }
+
+html .center-links {
+  width: 80%;
+  max-width: 45em;
+  /**spacing**/
+  margin-top: 5%;
+  margin-bottom: 25%;
+  /**flexbox**/
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /**internal spacing**/ }
+  html .center-links :not(:last-child) {
+    margin-right: 1%; }
+  html .center-links a {
+    /**internal**/
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    font-size: 100%;
+    line-height: 50px;
+    text-align: center;
+    /**container**/
+    height: 50px;
+    margin: auto;
+    box-sizing: border-box;
+    border: 2px solid white;
+    /**flexbox**/
+    flex: 1 1 auto; }
+    @media only screen and (max-width: 450px) {
+      html .center-links a {
+        font-size: 90%; } }
+    @media only screen and (max-width: 400px) {
+      html .center-links a {
+        font-size: 80%; } }
+    @media only screen and (max-width: 350px) {
+      html .center-links a {
+        font-size: 70%; } }
+    @media only screen and (max-width: 300px) {
+      html .center-links a {
+        font-size: 60%; } }
+
+/*# sourceMappingURL=root.css.map*/
