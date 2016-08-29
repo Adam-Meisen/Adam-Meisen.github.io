@@ -215,7 +215,7 @@ webpackJsonp([1],[
 	                 
 	                   renderer.render(scene, camera);
 	                 }*/ /** @type {Object[]} */var eventList = (0, _labels2events.getEvents)();var eventStream = document.createElement(null);eventStream.addEventListener('B', function (event) {kick();console.log("Kick " + event.detail.time.toString() + " " + audio.currentTime.toString());}); /** */function letsJam() {(0, _scheduler.startScheduler)(audio, eventList, eventStream); // start the music
-	  audio.play();window.audio = audio;console.log(audio.currentTime);}loadSong('./zettai/zettai_sample.ogg');
+	  audio.play();window.audio = audio;console.log(audio.currentTime);}var url = __webpack_require__(9);loadSong(url);
 
 /***/ },
 /* 1 */,
@@ -8496,6 +8496,12 @@ webpackJsonp([1],[
 	
 	module.exports = {
 	  startScheduler: startScheduler };
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "22081bd1747589d6f9f7aa0b90e78646.ogg";
 
 /***/ }
 ]);
