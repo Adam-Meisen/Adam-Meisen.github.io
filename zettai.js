@@ -122,19 +122,6 @@ webpackJsonp([1],[
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	var _labels2events = __webpack_require__(6);
 	var _scheduler = __webpack_require__(8); /*
 	                                            TweenMax.to("#wheel", 6, {
@@ -144,9 +131,9 @@ webpackJsonp([1],[
 	                                              repeat: -1
 	                                            });
 	                                            */ /* eslint-env browser */var wheel = document.getElementById('wheel'); // greensock
-	var pinwheel = document.getElementById('pinwheel');var beatState = 0;var bounce = _gsap.TweenMax.to("#kenny", 0.03, { scale: 1.05, ease: _gsap.Sine.easeIn, repeat: 1, paused: true, yoyo: true }); /** */function kick() {bounce.play(0);if (beatState) {pinwheel.style.fill = "#fff";wheel.style.fill = "#000";beatState = 0;} else {pinwheel.style.fill = "#000";wheel.style.fill = "#fff";beatState = 1;}} /* audio */ /** @type {HTMLAudioElement} */var audio; /** load song
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                      *  @param {String} url: song url
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */function loadSong(url) {audio = new Audio(url); // 3, 2, 1
+	var pinwheel = document.getElementById('pinwheel');var kenny = document.getElementById('kenny');var beatState = 0;var bounce = _gsap.TweenMax.to("#face", 0.1, { scale: 1.05, svgOrigin: "400 300", ease: _gsap.Sine.easeOut, repeat: 1, paused: true, yoyo: true }); /** */function kick() {bounce.play(0);if (beatState) {pinwheel.style.fill = "#fff";wheel.style.fill = "#000";beatState = 0;} else {pinwheel.style.fill = "#000";wheel.style.fill = "#fff";beatState = 1;}} /* audio */ /** @type {HTMLAudioElement} */var audio; /** load song
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        *  @param {String} url: song url
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        */function loadSong(url) {audio = new Audio(url); // 3, 2, 1
 	  letsJam(); /*
 	             var request = new XMLHttpRequest();
 	             request.open('GET', encodeURI(url), true);
@@ -163,8 +150,7 @@ webpackJsonp([1],[
 	               };
 	             };
 	             request.send();
-	             */} /*
-	                 var THREE = require('three');
+	             */} /*var THREE = require('three');
 	                 window.THREE = THREE; // expose the THREE variable to the debug console
 	                 
 	                 
@@ -172,35 +158,25 @@ webpackJsonp([1],[
 	                 var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 	                 var renderer = new THREE.WebGLRenderer();
 	                 
-	                 new THREE.TextureLoader().load('./zettai/wheel2.svg', svgOnLoad);
-	                 var wheel;
+	                 const createGeom = require('three-simplicial-complex')(THREE);
 	                 var material;
-	                 var geometry;
-	                 
-	                 function svgOnLoad(texture) {
-	                   material = new THREE.MeshBasicMaterial({
-	                     map: texture
-	                   });
-	                 
-	                   init();
-	                   animate();
-	                 }
+	                 var kennyPlane;
+	                 var svgMesh3d = require('svg-mesh-3d');
+	                 var kennyPath = require('extract-svg-path').parse(kenny.innerHTML);
+	                 window.kennyPath = kennyPath;
+	                 var kennyGeometry = createGeom(svgMesh3d(kennyPath));
 	                 
 	                 
 	                 function init() {
 	                   camera.position.z = 100;
 	                 
-	                 
-	                   geometry = new THREE.PlaneGeometry(100, 100);
-	                 
-	                 
 	                   material = new THREE.MeshBasicMaterial({
-	                     color: 0xff0000,
+	                     color: 0xffffff,
 	                     wireframe: true
 	                   });
 	                 
-	                   wheel = new THREE.Mesh(geometry, material);
-	                   scene.add(wheel);
+	                   kennyPlane = new THREE.Mesh(kennyGeometry, material);
+	                   scene.add(kennyPlane);
 	                 
 	                   renderer.setSize(window.innerWidth, window.innerHeight);
 	                 
@@ -210,8 +186,6 @@ webpackJsonp([1],[
 	                 
 	                 function animate() {
 	                   requestAnimationFrame(animate);
-	                 
-	                   wheel.rotation.z += 0.01;
 	                 
 	                   renderer.render(scene, camera);
 	                 }*/ /** @type {Object[]} */var eventList = (0, _labels2events.getEvents)();var eventStream = document.createElement(null);eventStream.addEventListener('B', function (event) {kick();console.log("Kick " + event.detail.time.toString() + " " + audio.currentTime.toString());}); /** */function letsJam() {(0, _scheduler.startScheduler)(audio, eventList, eventStream); // start the music
@@ -8486,7 +8460,7 @@ webpackJsonp([1],[
 	
 	
 	
-	startScheduler = startScheduler; /* eslint-env browser */var audioEventStream = document.createElement(null); /** @type {AudioContext} */var ctx; /** @type {Object[]} */var events; /** @type {Number} duration to look ahead in seconds*/var lookAheadDuration = 0.30;var safety = 0.25;var index = 0; /** */function lookAhead() {var currentTime = ctx.currentTime;var latest = currentTime + lookAheadDuration; // if the next event is in the period we're looking at
+	startScheduler = startScheduler; /* eslint-env browser */var audioEventStream = document.createElement(null); /** @type {AudioContext} */var ctx; /** @type {Object[]} */var events; /** @type {Number} duration to look ahead in seconds*/var lookAheadDuration = 0.30;var safety = 0.15;var index = 0; /** */function lookAhead() {var currentTime = ctx.currentTime;var latest = currentTime + lookAheadDuration; // if the next event is in the period we're looking at
 	  if (index < events.length && events[index].time <= latest) {while (events[index].time <= latest) {setTimeout(sendEvent, (events[index].time - currentTime - safety) * 1000, events[index]);index++;}}setTimeout(lookAhead, 10);} /** */function sendEvent(event) {// fire event with its timecode
 	  audioEventStream.dispatchEvent(new CustomEvent(event.name, { detail: { time: event.time } }));} /** Start the event scheduler.
 	                                                                                                   *  @param {AudioContext} context the AudioContext to synchronize events with
