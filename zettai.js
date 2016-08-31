@@ -163,9 +163,8 @@ webpackJsonp([1],[
 	             };
 	             request.send();
 	             */}var THREE = __webpack_require__(9);var canvg = __webpack_require__(10);window.canvg = canvg;window.THREE = THREE; // expose the THREE variable to the debug console
-	var scene = new THREE.Scene();var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);var renderer = new THREE.WebGLRenderer(); /** begin wheel defs */var wheelSVG = __webpack_require__(13);var wheelCanvas = document.createElement("canvas");wheelCanvas.height = wheelCanvas.width = 2048;canvg(wheelCanvas, wheelSVG);var wheelTexture = new THREE.Texture(wheelCanvas);wheelTexture.needsUpdate = true;var wheelGeometry = new THREE.PlaneGeometry(1024, 1024);var wheelMaterial = new THREE.MeshBasicMaterial({ map: wheelTexture });var wheelMesh = new THREE.Mesh(wheelGeometry, wheelMaterial); /** end wheel defs */function init() {scene = new THREE.Scene();camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);camera.position.z = 250;wheelMesh.position.y = -100;scene.add(wheelMesh);renderer = new THREE.WebGLRenderer();renderer.setSize(window.innerWidth, window.innerHeight);document.body.appendChild(renderer.domElement);}function animate() {requestAnimationFrame(animate);wheelMesh.rotation.z += 0.01;renderer.render(scene, camera);} /** @type {Object[]} */var eventList = (0, _labels2events.getEvents)();var eventStream = document.createElement(null);eventStream.addEventListener('B', function (event) {kick();console.log("Kick " + event.detail.time.toString() + " " + audio.currentTime.toString());}); /** */function letsJam() {/** start the renderer */init();animate(); /** remove the curtain */_gsap.TweenMax.to("#curtain", 1.5, { opacity: 0, ease: _gsap.Power0.easeNone, onComplete: function onComplete() {document.body.removeChild(curtain);} }); /** start the music and the scheduler */
-	  audio.play();
-	  (0, _scheduler.startScheduler)(audio, eventList, eventStream);
+	var scene = new THREE.Scene();var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);var renderer = new THREE.WebGLRenderer(); /** begin wheel defs */var wheelSVG = __webpack_require__(13);var wheelCanvas = document.createElement("canvas");wheelCanvas.height = wheelCanvas.width = 2048;canvg(wheelCanvas, wheelSVG);var wheelTexture = new THREE.Texture(wheelCanvas);wheelTexture.needsUpdate = true;var wheelGeometry = new THREE.PlaneGeometry(1024, 1024);var wheelMaterial = new THREE.MeshBasicMaterial({ map: wheelTexture });var wheelMesh = new THREE.Mesh(wheelGeometry, wheelMaterial); /** end wheel defs */function init() {scene = new THREE.Scene();camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);camera.position.z = 250;wheelMesh.position.y = -100;scene.add(wheelMesh);renderer = new THREE.WebGLRenderer();renderer.setSize(window.innerWidth, window.innerHeight);document.body.appendChild(renderer.domElement);}function animate() {requestAnimationFrame(animate);wheelMesh.rotation.z += 0.01;renderer.render(scene, camera);} /** @type {Object[]} */var eventList = (0, _labels2events.getEvents)();var eventStream = document.createElement(null);eventStream.addEventListener('B', function (event) {kick();console.log("Kick " + event.detail.time.toString() + " " + audio.currentTime.toString());}); /** */function letsJam() {/** start the renderer */init();animate(); /** start the music and the scheduler */audio.play();(0, _scheduler.startScheduler)(audio, eventList, eventStream); /** remove the curtain */_gsap.TweenMax.to("#curtain", 3, { opacity: 0, ease: _gsap.Sine.easeIn, onComplete: function onComplete() {document.body.removeChild(curtain);} });
+	
 	
 	  /** for debugging */
 	  window.audio = audio;
@@ -173,7 +172,11 @@ webpackJsonp([1],[
 	}
 	
 	var url = __webpack_require__(14);
-	loadSong(url);
+	
+	document.body.onclick = function (e) {
+	  document.body.onclick = null;
+	  loadSong(url);
+	};
 
 /***/ },
 /* 1 */,
