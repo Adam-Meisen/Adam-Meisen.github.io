@@ -129,6 +129,11 @@ webpackJsonp([1],[
 	
 	
 	
+	
+	
+	
+	
+	
 	var _labels2events = __webpack_require__(6);
 	var _scheduler = __webpack_require__(8); /*
 	                                            TweenMax.to("#wheel", 6, {
@@ -138,9 +143,9 @@ webpackJsonp([1],[
 	                                              repeat: -1
 	                                            });
 	                                            */ /* eslint-env browser */var wheel = document.getElementById('wheel'); // greensock
-	var pinwheel = document.getElementById('pinwheel');var kenny = document.getElementById('kenny');var beatState = 0;var bounce = _gsap.TweenMax.to("#face", 0.05, { scale: 1.03, svgOrigin: "400 300", ease: _gsap.Elastic.easeInOut.config(1.1, 1), repeat: 1, paused: true, yoyo: true }); /** */function kick() {bounce.play(0);if (beatState) {pinwheel.style.fill = "#fff";wheel.style.fill = "#000";beatState = 0;} else {pinwheel.style.fill = "#000";wheel.style.fill = "#fff";beatState = 1;}} /* audio */ /** @type {HTMLAudioElement} */var audio; /** load song
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             *  @param {String} url: song url
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             */function loadSong(url) {audio = new Audio(url); // 3, 2, 1
+	var pinwheel = document.getElementById('pinwheel');var kenny = document.getElementById('kenny');var curtain = document.getElementById('curtain');var beatState = 0;var stage = 0;var bounce = _gsap.TweenMax.to("#face", 0.05, { scale: 1.03, svgOrigin: "400 300", ease: _gsap.Elastic.easeInOut.config(1.1, 1), repeat: 1, paused: true, yoyo: true }); /** */function kick() {bounce.play(0);if (beatState) {pinwheel.style.fill = "#fff";wheel.style.fill = "#000";beatState = 0;} else {pinwheel.style.fill = "#000";wheel.style.fill = "#fff";beatState = 1;}} /* audio */ /** @type {HTMLAudioElement} */var audio; /** load song
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            *  @param {String} url: song url
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            */function loadSong(url) {audio = new Audio(url); // 3, 2, 1
 	  letsJam(); /*
 	             var request = new XMLHttpRequest();
 	             request.open('GET', encodeURI(url), true);
@@ -158,8 +163,17 @@ webpackJsonp([1],[
 	             };
 	             request.send();
 	             */}var THREE = __webpack_require__(9);var canvg = __webpack_require__(10);window.canvg = canvg;window.THREE = THREE; // expose the THREE variable to the debug console
-	var scene = new THREE.Scene();var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);var renderer = new THREE.WebGLRenderer();var geometry;var material;var mesh;var wheelSVG = __webpack_require__(13);var svgCanvas = document.createElement("canvas");svgCanvas.height = svgCanvas.width = 2048;canvg(svgCanvas, wheelSVG);var texture = new THREE.Texture(svgCanvas);texture.needsUpdate = true;function init() {scene = new THREE.Scene();camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);camera.position.z = 250;geometry = new THREE.PlaneGeometry(1000, 1000);material = new THREE.MeshBasicMaterial({ map: texture });mesh = new THREE.Mesh(geometry, material);mesh.position.y = -100;scene.add(mesh);renderer = new THREE.WebGLRenderer();renderer.setSize(window.innerWidth, window.innerHeight);document.body.appendChild(renderer.domElement);}function animate() {requestAnimationFrame(animate);renderer.render(scene, camera);} /** @type {Object[]} */var eventList = (0, _labels2events.getEvents)();var eventStream = document.createElement(null);eventStream.addEventListener('B', function (event) {kick();console.log("Kick " + event.detail.time.toString() + " " + audio.currentTime.toString());}); /** */function letsJam() {init();animate();(0, _scheduler.startScheduler)(audio, eventList, eventStream); // start the music
-	  audio.play();window.audio = audio;console.log(audio.currentTime);}var url = __webpack_require__(14);loadSong(url);
+	var scene = new THREE.Scene();var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);var renderer = new THREE.WebGLRenderer(); /** begin wheel defs */var wheelSVG = __webpack_require__(13);var wheelCanvas = document.createElement("canvas");wheelCanvas.height = wheelCanvas.width = 2048;canvg(wheelCanvas, wheelSVG);var wheelTexture = new THREE.Texture(wheelCanvas);wheelTexture.needsUpdate = true;var wheelGeometry = new THREE.PlaneGeometry(1024, 1024);var wheelMaterial = new THREE.MeshBasicMaterial({ map: wheelTexture });var wheelMesh = new THREE.Mesh(wheelGeometry, wheelMaterial); /** end wheel defs */function init() {scene = new THREE.Scene();camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);camera.position.z = 250;wheelMesh.position.y = -100;scene.add(wheelMesh);renderer = new THREE.WebGLRenderer();renderer.setSize(window.innerWidth, window.innerHeight);document.body.appendChild(renderer.domElement);}function animate() {requestAnimationFrame(animate);wheelMesh.rotation.z += 0.01;renderer.render(scene, camera);} /** @type {Object[]} */var eventList = (0, _labels2events.getEvents)();var eventStream = document.createElement(null);eventStream.addEventListener('B', function (event) {kick();console.log("Kick " + event.detail.time.toString() + " " + audio.currentTime.toString());}); /** */function letsJam() {/** start the renderer */init();animate(); /** remove the curtain */_gsap.TweenMax.to("#curtain", 1.5, { opacity: 0, ease: _gsap.Power0.easeNone, onComplete: function onComplete() {document.body.removeChild(curtain);} }); /** start the music and the scheduler */
+	  audio.play();
+	  (0, _scheduler.startScheduler)(audio, eventList, eventStream);
+	
+	  /** for debugging */
+	  window.audio = audio;
+	  console.log(audio.currentTime);
+	}
+	
+	var url = __webpack_require__(14);
+	loadSong(url);
 
 /***/ },
 /* 1 */,

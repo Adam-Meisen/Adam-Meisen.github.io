@@ -62,14 +62,23 @@
       }
       #wheel {
         display: none;
-        position: fixed;
+        /*position: fixed;
         left: 0;
         right: 0;
         margin: 0 auto;
         top: 100%;
         transform: translateY(-60%);
         min-height: 300%;
-        width: 300%;
+        width: 300%;*/
+      }
+      #curtain {
+        z-index: 2;
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        opacity: 1;
       }
       #kenny {
         /* center bottom */
@@ -80,16 +89,22 @@
         right: 0;
         margin: 0 auto;
         overflow: visible;
+        z-index: 3;
 
         /*size*/
         height: 50%;
         max-width: 100%;
+      }
+      canvas {
+        z-index: 1;
+        position: fixed;
       }
     </style>
 
   </head>
   <body id="territory">
 
+<div id="curtain"></div>
 
 <svg id="wheel" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 1000">
   <circle cx="500" cy="500" r="500" />
